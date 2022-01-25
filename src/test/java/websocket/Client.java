@@ -27,7 +27,7 @@ public class Client extends WebSocketClient {
     public void onOpen( ServerHandshake handshakedata ) {
         for(Iterator it = handshakedata.iterateHttpFields(); it.hasNext();) {
             String key = (String) it.next();
-            logger.info(key+":"+handshakedata.getFieldValue(key));
+            logger.info("onOpen : " + key + " = "+handshakedata.getFieldValue(key));
         }
         httpStatusMessage = handshakedata.getHttpStatusMessage();
         httpStatus = handshakedata.getHttpStatus();

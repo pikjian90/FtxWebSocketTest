@@ -15,7 +15,7 @@ import websocket.Client;
 
 import java.net.URI;
 
-public class testWebSocket{
+public class testTicker {
     public static Client c;
     public Logger logger;
 
@@ -57,19 +57,19 @@ public class testWebSocket{
     }
 
     @Test
-    public void testMain() {
+    public void testMessage() {
         try {
-            String input = "{\"channel\" : \"trades\",\n" + "\"market\" : \"BTC-PERP\",\n" +
+            String input = "{\"channel\" : \"ticker\",\n" + "\"market\" : \"BTC-PERP\",\n" +
                     "    \"op\" : \"subscribe\"\n" +
                     "}";
             c.send(input);
-            Thread.sleep(5000);
+            Thread.sleep(3000);
 
             SoftAssert softAssert = new SoftAssert();
             softAssert.assertTrue(c.responseMessage.get(0).contains("subscribed"),
                     "Subscribed response message is not received");
             softAssert.assertTrue(c.responseMessage.get(c.responseMessage.size()-1).
-                    contains("channel\": \"trades\", \"market\": \"BTC-PERP\", \"type\": \"update\", \"data\""),
+                    contains("channel\": \"ticker\", \"market\": \"BTC-PERP\", \"type\": \"update\", \"data\""),
                     "Update Response Message is not received");
             softAssert.assertAll();
 
