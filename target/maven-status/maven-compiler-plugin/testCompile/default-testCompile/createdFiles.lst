@@ -1,0 +1,7 @@
+testcase/TestTrades.class
+common/ExpectedResult.class
+websocket/Client.class
+testcase/TestMarkets.class
+testcase/TestTicker.class
+common/uri.class
+testcase/TestOrderBook.class

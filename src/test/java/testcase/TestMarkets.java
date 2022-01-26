@@ -15,11 +15,11 @@ import websocket.Client;
 
 import java.net.URI;
 
-public class testTrades {
+public class TestMarkets {
     public static Client c;
     public Logger logger;
 
-    @BeforeSuite(alwaysRun = true)
+    @BeforeSuite()
     public void setupSuite(){
         try {
             logger = Logger.getLogger("FtxWebSocketTest"); // added logger
@@ -41,7 +41,7 @@ public class testTrades {
             while (!c.getReadyState().equals(ReadyState.OPEN)) {
                 Thread.sleep(1000);
             }
-            logger.info("Connection is " + c.getReadyState());
+            logger.info("BeforeClass : Connection is " + c.getReadyState());
 
         }catch (Exception e){
             e.printStackTrace();
@@ -59,7 +59,7 @@ public class testTrades {
     @Test
     public void testMessage() {
         try {
-            String input = "{\"channel\" : \"trades\",\n" + "\"market\" : \"BTC-PERP\",\n" +
+            String input = "{\"channel\" : \"markets\",\n" + "\"market\" : \"BTC-PERP\",\n" +
                     "    \"op\" : \"subscribe\"\n" +
                     "}";
             c.send(input);
@@ -69,7 +69,7 @@ public class testTrades {
             softAssert.assertTrue(c.responseMessage.get(0).contains("subscribed"),
                     "Subscribed response message is not received");
             softAssert.assertTrue(c.responseMessage.get(c.responseMessage.size()-1).
-                    contains("channel\": \"trades\", \"market\": \"BTC-PERP\", \"type\": \"update\", \"data\""),
+                    contains("channel\": \"markets\""),
                     "Update Response Message is not received");
             softAssert.assertAll();
 
@@ -84,10 +84,14 @@ public class testTrades {
             c.close();
             Thread.sleep(1000);
 
+            boolean isConnectionClosed = c.isClosed();
             SoftAssert softAssert = new SoftAssert();
-            softAssert.assertTrue(c.isClosed(),"Connection is not closed successfully");
+            softAssert.assertTrue(isConnectionClosed,"Connection is not closed successfully");
             softAssert.assertAll();
 
+            if(c.isClosed()){
+                logger.info("AfterClass : Connection is closed");
+            }
         }catch(Exception e){
             e.printStackTrace();
         }
